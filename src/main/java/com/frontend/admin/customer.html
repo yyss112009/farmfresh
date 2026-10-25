@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers | FarmFresh Admin</title>
+    <script src="api.js"></script>
+    <script src="admin-common.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,900&family=Work+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --soil: #3E2C1C;
+            --green: #4C7A3D;
+            --green-dark: #3A5E2E;
+            --gold: #E4A73B;
+            --cream: #F6F1E4;
+            --mist: #E4EBDB;
+            --red: #B24C3C;
+            --white: #FFFDF9;
+            --ink: #2B2118;
+            --ink-soft: #6B5E4F;
+            --border: #E0D6C2;
+            --shadow: 0 4px 14px rgba(62, 44, 28, 0.08);
+            --radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: var(--cream);
+            color: var(--ink);
+        }
+
+        h1,
+        h2,
+        h3,
+        .brand-name {
+            font-family: 'Fraunces', serif;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+        }
+
+        input,
+        select {
+            font-family: inherit;
+        }
+
+        /* ===== Layout ===== */
+        .app {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+
+        /* ===== Sidebar ===== */
+        .sidebar {
+            background: var(--soil);
+            color: #F1E9DA;
+            padding: 20px 14px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 6px 20px 6px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 14px;
+        }
+
+        .brand-mark {
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
+            background: var(--green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+        }
+
+        .brand-name {
+            font-size: 19px;
+            font-weight: 700;
+        }
+
+        .brand-name span {
+            color: var(--gold);
+        }
+
+        .brand-sub {
+            font-size: 10px;
+            color: #C9BBA1;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 11px 12px;
+            border-radius: 9px;
+            color: #E7DCC7;
+            font-size: 14.5px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 3px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .nav-item.active {
+            background: var(--green);
+            color: #fff;
+        }
+
+        .sidebar-foot {
+            margin-top: auto;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item.logout:hover {
+            background: rgba(178, 76, 60, 0.35);
+        }
+
+        /* ===== Main ===== */
+        .main {
+            min-width: 0;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 24px;
+            background: var(--cream);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hamburger {
+            display: none;
+            background: var(--white);
+            border: 1px solid var(--border);
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
+            font-size: 16px;
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .page-sub {
+            font-size: 12.5px;
+            color: var(--ink-soft);
+        }
+
+        .topbar-right {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            font-size: 15px;
+        }
+
+        .icon-btn .dot {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--red);
+            box-shadow: 0 0 0 2px var(--white);
+        }
+
+        .admin-chip {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 6px 12px 6px 6px;
+        }
+
+        .avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 7px;
+            background: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .admin-chip .name {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .admin-chip .role {
+            font-size: 10.5px;
+            color: var(--ink-soft);
+        }
+
+        .content {
+            padding: 22px 24px 50px;
+        }
+
+        /* ===== Stat cards ===== */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-ic {
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+            background: var(--mist);
+        }
+
+        .stat-label {
+            font-size: 12.5px;
+            color: var(--ink-soft);
+            margin-top: 12px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        /* ===== Panels ===== */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .panel {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 18px;
+        }
+
+        .panel h3 {
+            font-size: 15.5px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .chart-wrap {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            height: 170px;
+        }
+
+        .bar-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .bar {
+            width: 100%;
+            max-width: 32px;
+            border-radius: 6px 6px 2px 2px;
+            background: var(--green);
+        }
+
+        .bar-col .lbl {
+            font-size: 10.5px;
+            color: var(--ink-soft);
+        }
+
+        .leader-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px dashed var(--border);
+        }
+
+        .leader-item:last-child {
+            border-bottom: none;
+        }
+
+        .leader-rank {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--mist);
+            color: var(--green-dark);
+            font-size: 11px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .leader-info {
+            flex: 1;
+        }
+
+        .leader-info .n {
+            font-size: 13.5px;
+            font-weight: 600;
+        }
+
+        .leader-info .m {
+            font-size: 11px;
+            color: var(--ink-soft);
+        }
+
+        .leader-val {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--green-dark);
+        }
+
+        /* ===== Tables ===== */
+        .table-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .table-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--cream);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 8px 12px;
+            max-width: 240px;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            background: transparent;
+            width: 100%;
+            font-size: 13px;
+        }
+
+        .select-filter {
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: var(--white);
+            padding: 8px 10px;
+            font-size: 13px;
+        }
+
+        .btn {
+            padding: 9px 15px;
+            border-radius: 9px;
+            font-size: 13.5px;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: var(--green);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: var(--green-dark);
+        }
+
+        .btn-ghost {
+            background: var(--white);
+            border: 1px solid var(--border);
+            color: var(--ink);
+        }
+
+        .btn-sm {
+            padding: 6px 10px;
+            font-size: 12px;
+            border-radius: 7px;
+        }
+
+        .spacer {
+            margin-left: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            text-align: left;
+            font-size: 11px;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+            padding: 11px 16px;
+            background: var(--mist);
+            white-space: nowrap;
+        }
+
+        tbody td {
+            padding: 12px 16px;
+            font-size: 13.5px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .cell-main {
+            font-weight: 600;
+        }
+
+        .cell-sub {
+            font-size: 11.5px;
+            color: var(--ink-soft);
+        }
+
+        .badge {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .badge.ok {
+            background: #E7F3E1;
+            color: var(--green-dark);
+        }
+
+        .badge.pending {
+            background: #FCF1DC;
+            color: #9A6A0E;
+        }
+
+        .badge.rejected,
+        .badge.blocked {
+            background: #FBEAE6;
+            color: var(--red);
+        }
+
+        .badge.transit {
+            background: #E5EEF7;
+            color: #2E5F8A;
+        }
+
+        .badge.unread {
+            background: #FCF1DC;
+            color: #9A6A0E;
+        }
+
+        .badge.read {
+            background: #E7F3E1;
+            color: var(--green-dark);
+        }
+
+        .row-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .icon-action {
+            width: 28px;
+            height: 28px;
+            border-radius: 7px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        .icon-action:hover {
+            background: var(--mist);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--ink-soft);
+        }
+
+        /* ===== Section head ===== */
+        .section-head {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .section-head h2 {
+            font-size: 21px;
+        }
+
+        .section-head p {
+            color: var(--ink-soft);
+            font-size: 13px;
+            margin-top: 2px;
+        }
+
+        /* ===== Modal ===== */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(43, 33, 24, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: 20px;
+        }
+
+        .overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--white);
+            border-radius: 14px;
+            width: 100%;
+            max-width: 440px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .modal-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-head h3 {
+            font-size: 16px;
+        }
+
+        .modal-close {
+            width: 28px;
+            height: 28px;
+            border-radius: 7px;
+            background: var(--mist);
+            font-size: 14px;
+        }
+
+        .modal-body {
+            padding: 18px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .field label {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .field input,
+        .field select,
+        .field textarea {
+            width: 100%;
+            padding: 9px 11px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 13.5px;
+            background: var(--cream);
+            font-family: inherit;
+        }
+
+        .field textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .field-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .modal-foot {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 14px 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .toast-stack {
+            position: fixed;
+            top: 18px;
+            right: 18px;
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .toast {
+            background: var(--soil);
+            color: #fff;
+            padding: 12px 16px;
+            border-radius: 9px;
+            font-size: 13px;
+        }
+
+        /* ===== Login page ===== */
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(160deg, var(--soil), #2E2114);
+            padding: 20px;
+        }
+
+        .login-card {
+            background: var(--white);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 380px;
+            padding: 32px 28px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-card .brand {
+            border-bottom: none;
+            justify-content: center;
+            margin-bottom: 6px;
+            padding-bottom: 0;
+        }
+
+        .login-card .brand-name {
+            color: var(--ink);
+            font-size: 22px;
+        }
+
+        .login-sub {
+            text-align: center;
+            color: var(--ink-soft);
+            font-size: 13px;
+            margin-bottom: 22px;
+        }
+
+        .login-card .field {
+            margin-bottom: 14px;
+        }
+
+        .login-card .btn {
+            width: 100%;
+            padding: 11px;
+            font-size: 14px;
+            margin-top: 6px;
+        }
+
+        .login-hint {
+            text-align: center;
+            font-size: 11.5px;
+            color: var(--ink-soft);
+            margin-top: 16px;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width:1000px) {
+            .stat-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width:820px) {
+            .app {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                width: 230px;
+                height: 100vh;
+                z-index: 40;
+                transform: translateX(-100%);
+                transition: transform .2s ease;
+            }
+
+            .app.mobile-open .sidebar {
+                transform: translateX(0);
+            }
+
+            .hamburger {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width:600px) {
+            .stat-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .content {
+                padding: 14px;
+            }
+
+            .topbar {
+                padding: 12px 14px;
+            }
+
+            .field-row {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-chip .name,
+            .admin-chip .role {
+                display: none;
+            }
+
+            thead {
+                display: none;
+            }
+
+            table,
+            tbody,
+            tr,
+            td {
+                display: block;
+                width: 100%;
+            }
+
+            tbody tr {
+                border: 1px solid var(--border);
+                border-radius: 10px;
+                margin: 10px;
+                padding: 4px 0;
+            }
+
+            tbody td {
+                border-bottom: none;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+                padding: 8px 12px;
+            }
+
+            tbody td::before {
+                content: attr(data-label);
+                font-size: 10px;
+                text-transform: uppercase;
+                color: var(--ink-soft);
+                font-weight: 700;
+            }
+
+            .table-card {
+                background: transparent;
+                box-shadow: none;
+                border: none;
+            }
+
+            .table-toolbar {
+                background: var(--white);
+                border-radius: 12px;
+                border: 1px solid var(--border);
+                margin-bottom: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app" id="app">
+
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-mark">🌾</div>
+                <div>
+                    <div class="brand-name">Farm<span>Fresh</span></div>
+                    <div class="brand-sub">Admin Panel</div>
+                </div>
+            </div>
+
+            <a class="nav-item" href="dash.html">📊 Dashboard</a>
+            <a class="nav-item" href="farmer.html">🧑‍🌾 Farmers</a>
+            <a class="nav-item" href="product.html">🥬 Products</a>
+            <a class="nav-item" href="order.html">📦 Orders</a>
+            <a class="nav-item active" href="customer.html">👥 Customers</a>
+            <a class="nav-item" href="msg.html">✉️ Messages <span id="msgBadge"
+                    style="margin-left:auto; background:var(--red); color:#fff; font-size:10.5px; padding:2px 7px; border-radius:20px; font-weight:700;"></span></a>
+            <a class="nav-item" href="settings.html">⚙️ Settings</a>
+
+            <div class="sidebar-foot">
+                <a class="nav-item logout" href="../user/loginpage.html" onclick="adminLogout(event)">🚪 Logout</a>
+            </div>
+        </aside>
+
+        <div class="main">
+            <div class="topbar">
+                <button class="hamburger" onclick="toggleMobileNav()">☰</button>
+                <div>
+                    <div class="page-title">Customers</div>
+                    <div class="page-sub">View registered customers</div>
+                </div>
+                <div class="topbar-right">
+                    <div class="admin-chip">
+                        <div class="avatar">A</div>
+                        <div>
+                            <div class="name">Admin</div>
+                            <div class="role">Super Admin</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="section-head">
+                    <div>
+                        <h2>Customers</h2>
+                        <p>Registered customers and their order history</p>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-toolbar">
+                        <div class="search-box">🔍<input type="text" id="customerSearch"
+                                placeholder="Search customer..."></div>
+                    </div>
+                    <div style="overflow-x:auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Customer</th>
+                                    <th>City</th>
+                                    <th>Orders</th>
+                                    <th>Total Spent</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customersBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="toast-stack" id="toastStack"></div>
+
+    <script>
+        var allCustomers = [];
+
+        async function loadCustomers() {
+            try {
+                allCustomers = await ffGet('/admin/customers');
+            } catch (err) {
+                showToast('Could not load customers: ' + err.message);
+                allCustomers = [];
+            }
+            renderCustomers();
+        }
+
+        function renderCustomers() {
+            var search = document.getElementById('customerSearch').value.toLowerCase();
+
+            var list = [];
+            for (var i = 0; i < allCustomers.length; i++) {
+                var c = allCustomers[i];
+                if (c.name.toLowerCase().indexOf(search) !== -1 || (c.city || '').toLowerCase().indexOf(search) !== -1) list.push(c);
+            }
+
+            var body = document.getElementById('customersBody');
+            if (list.length === 0) {
+                body.innerHTML = '<tr><td colspan="6"><div class="empty-state">No customers found</div></td></tr>';
+                return;
+            }
+
+            var html = "";
+            for (var j = 0; j < list.length; j++) {
+                var c = list[j];
+                var isBlocked = c.status === 'BLOCKED';
+                html += '<tr>' +
+                    '<td data-label="Customer" class="cell-main">' + c.name + '</td>' +
+                    '<td data-label="City">' + (c.city || '-') + '</td>' +
+                    '<td data-label="Orders">' + c.orders + '</td>' +
+                    '<td data-label="Total Spent">' + fmtMoney(c.totalSpent) + '</td>' +
+                    '<td data-label="Status">' + badgeHtml(isBlocked ? 'blocked' : 'ok') + '</td>' +
+                    '<td data-label="Actions"><div class="row-actions">' +
+                    '<button class="icon-action" onclick="toggleCustomerStatus(' + c.id + ', \'' + (isBlocked ? 'ACTIVE' : 'BLOCKED') + '\')">' +
+                    (isBlocked ? '✔️' : '🚫') + '</button>' +
+                    '</div></td>' +
+                    '</tr>';
+            }
+            body.innerHTML = html;
+        }
+
+        async function toggleCustomerStatus(id, newStatus) {
+            try {
+                await ffPut('/admin/customers/' + id + '/status', { status: newStatus });
+                showToast(newStatus === 'BLOCKED' ? 'Customer blocked' : 'Customer unblocked');
+                await loadCustomers();
+            } catch (err) {
+                showToast('Could not update customer: ' + err.message);
+            }
+        }
+
+        document.getElementById('customerSearch').addEventListener('input', renderCustomers);
+
+        loadCustomers();
+    </script>
+</body>
+
+</html>

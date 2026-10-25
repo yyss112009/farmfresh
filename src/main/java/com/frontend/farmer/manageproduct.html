@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Products | FarmFresh</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --leaf: #2E8B57;
+            --leaf-dark: #1B5E20;
+            --leaf-deep: #175c3d;
+            --turmeric: #E8A33D;
+            --ink: #1F2A1A;
+            --paper: #F8F6EF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', Arial, sans-serif;
+        }
+
+        body {
+            background: var(--paper);
+        }
+
+        h1, h2, h3 {
+            font-family: 'Bitter', Georgia, serif;
+        }
+
+        .navbar {
+            background-color: var(--leaf-deep);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, .15);
+        }
+
+        .navbar-brand {
+            font-family: 'Bitter', Georgia, serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff !important;
+        }
+
+        .navbar .nav-link {
+            color: #d9ffd7;
+            font-size: 15px;
+            margin-left: 6px;
+            border-radius: 6px;
+            padding: 8px 12px !important;
+            transition: .15s;
+        }
+
+        .navbar .nav-link i {
+            margin-right: 5px;
+        }
+
+        .navbar .nav-link:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar .nav-link.active {
+            color: var(--ink);
+            background: var(--turmeric);
+            font-weight: 600;
+        }
+
+        .nav-farmer-name {
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+            margin-left: 10px;
+            padding: 6px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+        }
+
+        .hero1 {
+            background: linear-gradient(rgba(15, 40, 25, 0.75), rgba(15, 40, 25, 0.75)),
+                url("https://images.unsplash.com/photo-1595855759920-86582396756a?auto=format&fit=crop&w=1500&q=80");
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 55px 20px 65px;
+        }
+
+        .hero1 .eyebrow {
+            text-transform: uppercase;
+            letter-spacing: .15em;
+            font-size: 12px;
+            color: var(--turmeric);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .hero1 h1 {
+            font-size: 34px;
+            margin-bottom: 8px;
+        }
+
+        .hero1 p {
+            font-size: 16px;
+            color: #e7f3e9;
+        }
+
+        .content-wrap {
+            width: 92%;
+            max-width: 1150px;
+            margin: -35px auto 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .panel {
+            background: white;
+            padding: 26px;
+            border-radius: 14px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+        }
+
+        .panel-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .panel-head h3 {
+            color: var(--leaf-deep);
+            margin: 0;
+        }
+
+        .table thead {
+            background: #eef5ee;
+        }
+
+        .table th {
+            color: var(--leaf-deep);
+            font-size: 13.5px;
+            text-transform: uppercase;
+            letter-spacing: .03em;
+            border-bottom: none;
+        }
+
+        .table td {
+            vertical-align: middle;
+            font-size: 14.5px;
+        }
+
+        .prod-thumb {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #f0f0f0;
+        }
+
+        .badge-cat {
+            background: #e7f3ea;
+            color: var(--leaf-dark);
+            font-weight: 600;
+            font-size: 12px;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+
+        .btn-sm-action {
+            border: none;
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .btn-edit {
+            background: #fff3d9;
+            color: #8a6100;
+        }
+
+        .btn-edit:hover {
+            background: #ffe6ad;
+        }
+
+        .btn-del {
+            background: #fbe9e7;
+            color: #96281c;
+        }
+
+        .btn-del:hover {
+            background: #f6cfc9;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #8a978a;
+        }
+
+        .empty-state i {
+            font-size: 42px;
+            display: block;
+            margin-bottom: 12px;
+            color: #c8d8c8;
+        }
+
+        footer {
+            background: var(--leaf-deep);
+            color: #d9ffd7;
+            text-align: center;
+            padding: 18px;
+            margin-top: 50px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 576px) {
+            .hero1 {
+                padding: 45px 16px 55px;
+            }
+
+            .hero1 h1 {
+                font-size: 26px;
+            }
+
+            .content-wrap {
+                margin-top: -22px;
+            }
+
+            .panel {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid px-lg-4">
+
+            <a class="navbar-brand" href="farmerdash.html">🌾 FarmFresh</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
+                aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarMenu">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="farmerdash.html">
+                            <i class="bi bi-house-fill"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="add12.html">
+                            <i class="bi bi-plus-circle-fill"></i>Add Product
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="manageproduct.html">
+                            <i class="bi bi-box-seam-fill"></i>Manage Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="orders.html">
+                            <i class="bi bi-cart-check-fill"></i>Orders
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html">
+                            <i class="bi bi-person-fill"></i>Profile
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="logoutLink">
+                            <i class="bi bi-box-arrow-right"></i>Logout
+                        </a>
+                    </li>
+                    <li class="nav-item" id="farmerNameBadgeWrap" style="display:none;">
+                        <span class="nav-farmer-name" id="farmerNameBadge"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero1">
+        <div class="eyebrow">Manage Products</div>
+        <h1>Your Product Listings</h1>
+        <p>View, edit, or remove products from your store.</p>
+    </div>
+
+    <div class="content-wrap">
+        <div class="panel">
+            <div class="panel-head">
+                <h3>All Products</h3>
+                <a href="add12.html" class="btn btn-leaf" style="background:var(--leaf);color:#fff;border-radius:8px;font-weight:600;">
+                    <i class="bi bi-plus-circle"></i> Add New Product
+                </a>
+            </div>
+
+            <div class="table-responsive" id="tableWrap">
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Unit</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTableBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="empty-state" id="emptyState" style="display:none;">
+                <i class="bi bi-inbox"></i>
+                No products yet. Start by adding your first product.
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm">
+                        <input type="hidden" id="editId">
+                        <div class="mb-3">
+                            <label class="form-label">Product Name</label>
+                            <input type="text" class="form-control" id="editName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Category</label>
+                            <select class="form-select" id="editCategory" required>
+                                <option value="Vegetables">Vegetables</option>
+                                <option value="Fruits">Fruits</option>
+                                <option value="Grains">Grains</option>
+                                <option value="Dairy">Dairy</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <label class="form-label">Price (₹)</label>
+                                <input type="number" min="0" step="0.01" class="form-control" id="editPrice" required>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Quantity</label>
+                                <input type="number" min="0" class="form-control" id="editQty" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-cancel" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-leaf" id="saveEditBtn" style="background:var(--leaf);color:#fff;">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <footer>
+        © 2026 Farmer To Customer | Farmer Dashboard
+    </footer>
+
+    <script src="auth.js"></script>
+    <script src="api.js"></script>
+    <script>
+        const session = ffRequireRole('farmer', '../user/loginpage.html');
+        if (session) {
+            document.getElementById('farmerNameBadge').textContent = session.fullName;
+            document.getElementById('farmerNameBadgeWrap').style.display = 'block';
+        }
+
+        document.getElementById('logoutLink').addEventListener('click', function (e) {
+            e.preventDefault();
+            ffLogout('../user/loginpage.html');
+        });
+
+        let currentProducts = [];
+
+        async function renderProducts() {
+            const tbody = document.getElementById('productTableBody');
+            const empty = document.getElementById('emptyState');
+            const tableWrap = document.getElementById('tableWrap');
+
+            try {
+                currentProducts = await ffGet('/farmer/products');
+            } catch (err) {
+                alert('Could not load your products: ' + err.message);
+                return;
+            }
+
+            if (currentProducts.length === 0) {
+                tableWrap.style.display = 'none';
+                empty.style.display = 'block';
+                return;
+            }
+
+            tableWrap.style.display = 'block';
+            empty.style.display = 'none';
+
+            tbody.innerHTML = currentProducts.map(p => `
+                <tr>
+                    <td>${p.imageUrl ? `<img src="${p.imageUrl}" class="prod-thumb">` : `<div class="prod-thumb d-flex align-items-center justify-content-center"><i class="bi bi-image text-secondary"></i></div>`}</td>
+                    <td><strong>${p.name}</strong></td>
+                    <td><span class="badge-cat">${p.category || ''}</span></td>
+                    <td>₹${Number(p.price).toFixed(2)}</td>
+                    <td>${p.quantity}</td>
+                    <td>${p.unit || ''}</td>
+                    <td class="text-end">
+                        <button class="btn-sm-action btn-edit" onclick="openEdit(${p.id})"><i class="bi bi-pencil"></i> Edit</button>
+                        <button class="btn-sm-action btn-del" onclick="deleteProduct(${p.id})"><i class="bi bi-trash"></i> Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function deleteProduct(id) {
+            if (!confirm('Delete this product?')) return;
+            try {
+                await ffDelete('/farmer/products/' + id);
+                renderProducts();
+            } catch (err) {
+                alert('Could not delete product: ' + err.message);
+            }
+        }
+
+        let editModal;
+        function openEdit(id) {
+            const p = currentProducts.find(x => x.id === id);
+            if (!p) return;
+            document.getElementById('editId').value = p.id;
+            document.getElementById('editName').value = p.name;
+            document.getElementById('editCategory').value = p.category;
+            document.getElementById('editPrice').value = p.price;
+            document.getElementById('editQty').value = p.quantity;
+            editModal.show();
+        }
+
+        document.getElementById('saveEditBtn').addEventListener('click', async function () {
+            const id = document.getElementById('editId').value;
+            const p = currentProducts.find(x => String(x.id) === String(id));
+            if (!p) return;
+
+            const payload = {
+                name: document.getElementById('editName').value.trim(),
+                category: document.getElementById('editCategory').value,
+                price: parseFloat(document.getElementById('editPrice').value),
+                quantity: parseInt(document.getElementById('editQty').value, 10),
+                unit: p.unit,
+                description: p.description,
+                imageUrl: p.imageUrl
+            };
+
+            try {
+                await ffPut('/farmer/products/' + id, payload);
+                renderProducts();
+                editModal.hide();
+            } catch (err) {
+                alert('Could not save changes: ' + err.message);
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            editModal = new bootstrap.Modal(document.getElementById('editModal'));
+            renderProducts();
+        });
+    </script>
+
+</body>
+
+</html>

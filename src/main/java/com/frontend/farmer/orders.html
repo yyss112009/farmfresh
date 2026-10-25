@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders | FarmFresh</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --leaf: #2E8B57;
+            --leaf-dark: #1B5E20;
+            --leaf-deep: #175c3d;
+            --turmeric: #E8A33D;
+            --ink: #1F2A1A;
+            --paper: #F8F6EF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', Arial, sans-serif;
+        }
+
+        body {
+            background: var(--paper);
+        }
+
+        h1, h2, h3 {
+            font-family: 'Bitter', Georgia, serif;
+        }
+
+        .navbar {
+            background-color: var(--leaf-deep);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, .15);
+        }
+
+        .navbar-brand {
+            font-family: 'Bitter', Georgia, serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff !important;
+        }
+
+        .navbar .nav-link {
+            color: #d9ffd7;
+            font-size: 15px;
+            margin-left: 6px;
+            border-radius: 6px;
+            padding: 8px 12px !important;
+            transition: .15s;
+        }
+
+        .navbar .nav-link i {
+            margin-right: 5px;
+        }
+
+        .navbar .nav-link:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar .nav-link.active {
+            color: var(--ink);
+            background: var(--turmeric);
+            font-weight: 600;
+        }
+
+        .nav-farmer-name {
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+            margin-left: 10px;
+            padding: 6px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+        }
+
+        .hero1 {
+            background: linear-gradient(rgba(15, 40, 25, 0.75), rgba(15, 40, 25, 0.75)),
+                url("https://images.unsplash.com/photo-1560493676-04071c5f467b?auto=format&fit=crop&w=1500&q=80");
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 55px 20px 65px;
+        }
+
+        .hero1 .eyebrow {
+            text-transform: uppercase;
+            letter-spacing: .15em;
+            font-size: 12px;
+            color: var(--turmeric);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .hero1 h1 {
+            font-size: 34px;
+            margin-bottom: 8px;
+        }
+
+        .hero1 p {
+            font-size: 16px;
+            color: #e7f3e9;
+        }
+
+        .content-wrap {
+            width: 92%;
+            max-width: 1150px;
+            margin: -35px auto 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .panel {
+            background: white;
+            padding: 26px;
+            border-radius: 14px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+        }
+
+        .panel-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .panel-head h3 {
+            color: var(--leaf-deep);
+            margin: 0;
+        }
+
+        .filter-tabs .btn {
+            border-radius: 20px;
+            font-size: 13.5px;
+            font-weight: 600;
+            padding: 6px 16px;
+            border: 1px solid #d9d9d9;
+            color: #555;
+            background: #fff;
+        }
+
+        .filter-tabs .btn.active {
+            background: var(--leaf);
+            color: #fff;
+            border-color: var(--leaf);
+        }
+
+        .table thead {
+            background: #eef5ee;
+        }
+
+        .table th {
+            color: var(--leaf-deep);
+            font-size: 13.5px;
+            text-transform: uppercase;
+            letter-spacing: .03em;
+            border-bottom: none;
+        }
+
+        .table td {
+            vertical-align: middle;
+            font-size: 14.5px;
+        }
+
+        .status-badge {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 20px;
+        }
+
+        .status-pending {
+            background: #fff3d9;
+            color: #8a6100;
+        }
+
+        .status-confirmed {
+            background: #e0eefe;
+            color: #1a5ba6;
+        }
+
+        .status-shipped {
+            background: #e9e0fe;
+            color: #5b32a6;
+        }
+
+        .status-delivered {
+            background: #e0f7e6;
+            color: #1b7a3d;
+        }
+
+        .status-cancelled {
+            background: #fbe9e7;
+            color: #96281c;
+        }
+
+        .status-select {
+            border-radius: 6px;
+            font-size: 13px;
+            padding: 5px 8px;
+            border: 1px solid #d9d9d9;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #8a978a;
+        }
+
+        .empty-state i {
+            font-size: 42px;
+            display: block;
+            margin-bottom: 12px;
+            color: #c8d8c8;
+        }
+
+        footer {
+            background: var(--leaf-deep);
+            color: #d9ffd7;
+            text-align: center;
+            padding: 18px;
+            margin-top: 50px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 576px) {
+            .hero1 {
+                padding: 45px 16px 55px;
+            }
+
+            .hero1 h1 {
+                font-size: 26px;
+            }
+
+            .content-wrap {
+                margin-top: -22px;
+            }
+
+            .panel {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid px-lg-4">
+
+            <a class="navbar-brand" href="farmerdash.html">🌾 FarmFresh</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
+                aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarMenu">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="farmerdash.html">
+                            <i class="bi bi-house-fill"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="add12.html">
+                            <i class="bi bi-plus-circle-fill"></i>Add Product
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="manageproduct.html">
+                            <i class="bi bi-box-seam-fill"></i>Manage Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="orders.html">
+                            <i class="bi bi-cart-check-fill"></i>Orders
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html">
+                            <i class="bi bi-person-fill"></i>Profile
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="logoutLink">
+                            <i class="bi bi-box-arrow-right"></i>Logout
+                        </a>
+                    </li>
+                    <li class="nav-item" id="farmerNameBadgeWrap" style="display:none;">
+                        <span class="nav-farmer-name" id="farmerNameBadge"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero1">
+        <div class="eyebrow">Orders</div>
+        <h1>Customer Orders</h1>
+        <p>Track and update the status of orders placed for your products.</p>
+    </div>
+
+    <div class="content-wrap">
+        <div class="panel">
+            <div class="panel-head">
+                <h3>All Orders</h3>
+                <div class="filter-tabs d-flex gap-2 flex-wrap" id="filterTabs">
+                    <button class="btn active" data-filter="All">All</button>
+                    <button class="btn" data-filter="Pending">Pending</button>
+                    <button class="btn" data-filter="Confirmed">Confirmed</button>
+                    <button class="btn" data-filter="Shipped">Shipped</button>
+                    <button class="btn" data-filter="Delivered">Delivered</button>
+                    <button class="btn" data-filter="Cancelled">Cancelled</button>
+                </div>
+            </div>
+
+            <div class="table-responsive" id="tableWrap">
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Product</th>
+                            <th>Qty</th>
+                            <th>Total</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="empty-state" id="emptyState" style="display:none;">
+                <i class="bi bi-cart-x"></i>
+                No orders found for this filter.
+            </div>
+        </div>
+    </div>
+
+    <!-- Customer & Order Details Modal -->
+    <div class="modal fade" id="customerDetailsModal" tabindex="-1" aria-labelledby="customerDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content" style="border-radius:14px;overflow:hidden;border:none;box-shadow:0 10px 30px rgba(0,0,0,0.15);">
+                <div class="modal-header" style="background:var(--leaf-deep);color:#fff;">
+                    <h5 class="modal-title" id="customerDetailsModalLabel" style="font-family:'Bitter',Georgia,serif;font-weight:600;">
+                        <i class="bi bi-person-lines-fill me-2"></i>Customer & Order Details
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4" id="modalContentBody">
+                    <!-- Dynamic details inserted here -->
+                </div>
+                <div class="modal-footer bg-light d-flex justify-content-between">
+                    <div class="d-flex gap-2 align-items-center">
+                        <span class="text-muted small">Update Status:</span>
+                        <select class="form-select form-select-sm" id="modalStatusSelect" style="width:140px;">
+                            <option value="Pending">Pending</option>
+                            <option value="Confirmed">Confirmed</option>
+                            <option value="Shipped">Shipped</option>
+                            <option value="Delivered">Delivered</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" id="modalSaveStatusBtn">Save</button>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-sm btn-success" id="modalAcceptBtn">
+                            <i class="bi bi-check-circle-fill me-1"></i>Accept Order
+                        </button>
+                        <button type="button" class="btn btn-sm btn-danger" id="modalCancelBtn">
+                            <i class="bi bi-x-circle-fill me-1"></i>Cancel Order
+                        </button>
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        © 2026 Farmer To Customer | Farmer Dashboard
+    </footer>
+
+    <script src="api.js"></script>
+    <script>
+        const session = ffRequireRole('farmer', '../user/loginpage.html');
+        if (session) {
+            document.getElementById('farmerNameBadge').textContent = session.fullName;
+            document.getElementById('farmerNameBadgeWrap').style.display = 'block';
+        }
+
+        document.getElementById('logoutLink').addEventListener('click', function (e) {
+            e.preventDefault();
+            ffLogout('../user/loginpage.html');
+        });
+
+        const statusClassMap = {
+            Pending: 'status-pending',
+            Confirmed: 'status-confirmed',
+            Shipped: 'status-shipped',
+            Delivered: 'status-delivered',
+            Cancelled: 'status-cancelled'
+        };
+
+        let currentFilter = 'All';
+        let allOrderItems = [];
+        let detailsModal = null;
+        let selectedOrderId = null;
+
+        async function loadOrders() {
+            try {
+                allOrderItems = await ffGet('/farmer/orders');
+            } catch (err) {
+                alert('Could not load orders: ' + err.message);
+                allOrderItems = [];
+            }
+            renderOrders();
+        }
+
+        function renderOrders() {
+            let orders = allOrderItems;
+            if (currentFilter !== 'All') {
+                orders = orders.filter(o => o.status === currentFilter);
+            }
+
+            const tbody = document.getElementById('ordersTableBody');
+            const empty = document.getElementById('emptyState');
+            const tableWrap = document.getElementById('tableWrap');
+
+            if (orders.length === 0) {
+                tableWrap.style.display = 'none';
+                empty.style.display = 'block';
+                return;
+            }
+
+            tableWrap.style.display = 'block';
+            empty.style.display = 'none';
+
+            tbody.innerHTML = orders.map((o, index) => {
+                const totalAmt = (o.quantity * o.price).toFixed(2);
+                const isPending = o.status === 'Pending';
+                const isConfirmed = o.status === 'Confirmed' || o.status === 'Accepted';
+                const isCancelled = o.status === 'Cancelled';
+                const rowBg = isPending ? 'style="background-color: #fffbf0;"' : '';
+
+                return `
+                <tr ${rowBg} id="order-row-${o.orderId}">
+                    <td><strong>ORD${o.orderId}</strong></td>
+                    <td>
+                        <div class="fw-semibold text-dark">${o.customerName || 'Guest Customer'}</div>
+                        <small class="text-muted">${o.customerPhone || ''}</small>
+                    </td>
+                    <td><strong>${o.productName}</strong></td>
+                    <td>${o.quantity} ${o.unit || ''}</td>
+                    <td><strong class="text-success">₹${totalAmt}</strong></td>
+                    <td>${o.createdAt ? o.createdAt.substring(0, 10) : ''}</td>
+                    <td>
+                        ${isPending ? `<span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i>Pending</span>`
+                                    : `<span class="status-badge ${statusClassMap[o.status] || ''}">${o.status}</span>`}
+                    </td>
+                    <td class="text-end">
+                        <div class="d-flex flex-column align-items-end gap-1">
+                            <button class="btn btn-sm btn-outline-success py-1 px-2" style="font-size:12.5px;border-radius:6px;" onclick="viewCustomerDetails(${index})" title="View Details">
+                                <i class="bi bi-eye-fill"></i> View Details
+                            </button>
+                            <div class="d-flex gap-1 mt-1">
+                                <button class="btn btn-sm btn-success py-1 px-2 fw-semibold" style="font-size:12px;border-radius:6px;" onclick="updateStatus(${o.orderId}, 'Confirmed')" title="Accept Order" ${isConfirmed ? 'disabled' : ''}>
+                                    <i class="bi bi-check-circle-fill me-1"></i> Accept
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger py-1 px-2" style="font-size:12px;border-radius:6px;" onclick="updateStatus(${o.orderId}, 'Cancelled')" title="Cancel Order" ${isCancelled ? 'disabled' : ''}>
+                                    <i class="bi bi-x-circle me-1"></i> Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                `;
+            }).join('');
+        }
+
+        function viewOrderById(orderId) {
+            const idx = allOrderItems.findIndex(o => String(o.orderId) === String(orderId));
+            if (idx !== -1) {
+                viewCustomerDetails(idx);
+                const row = document.getElementById("order-row-" + orderId);
+                if (row) {
+                    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    row.classList.add('table-primary');
+                    setTimeout(() => row.classList.remove('table-primary'), 3000);
+                }
+            }
+        }
+
+        function viewCustomerDetails(index) {
+            const o = allOrderItems[index];
+            if (!o) return;
+
+            selectedOrderId = o.orderId;
+            const totalAmt = (o.quantity * o.price).toFixed(2);
+            const fullAddress = [o.deliveryAddress, o.city, o.state, o.pin].filter(Boolean).join(', ') || 'No address provided';
+
+            const html = `
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3 h-100 border">
+                            <h6 class="text-success fw-bold mb-3"><i class="bi bi-person-fill me-1"></i> Customer Information</h6>
+                            <p class="mb-2"><strong>Name:</strong> ${o.customerName || 'Guest Customer'}</p>
+                            <p class="mb-2"><strong>Phone:</strong> <a href="tel:${o.customerPhone || ''}" class="text-decoration-none">${o.customerPhone || 'N/A'}</a></p>
+                            <p class="mb-0"><strong>Email:</strong> <a href="mailto:${o.customerEmail || ''}" class="text-decoration-none">${o.customerEmail || 'N/A'}</a></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3 h-100 border">
+                            <h6 class="text-success fw-bold mb-3"><i class="bi bi-truck me-1"></i> Delivery Information</h6>
+                            <p class="mb-2"><strong>Address:</strong> ${fullAddress}</p>
+                            <p class="mb-2"><strong>Delivery Type:</strong> ${o.deliveryType || 'Standard'}</p>
+                            <p class="mb-0"><strong>Order Date:</strong> ${o.createdAt ? o.createdAt.replace('T', ' ').substring(0, 19) : 'N/A'}</p>
+                        </div>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <div class="p-3 border rounded-3 bg-white">
+                            <h6 class="text-success fw-bold mb-3"><i class="bi bi-basket-fill me-1"></i> Product Ordered</h6>
+                            <div class="table-responsive">
+                                <table class="table table-bordered mb-0 align-middle">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Quantity</th>
+                                            <th>Price / Unit</th>
+                                            <th>Line Total</th>
+                                            <th>Current Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>${o.productName}</strong></td>
+                                            <td>${o.quantity} ${o.unit || ''}</td>
+                                            <td>₹${Number(o.price || 0).toFixed(2)}</td>
+                                            <td><strong class="text-success">₹${totalAmt}</strong></td>
+                                            <td><span class="status-badge ${statusClassMap[o.status] || ''}">${o.status}</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('modalContentBody').innerHTML = html;
+            document.getElementById('modalStatusSelect').value = o.status;
+
+            if (!detailsModal) {
+                detailsModal = new bootstrap.Modal(document.getElementById('customerDetailsModal'));
+            }
+            detailsModal.show();
+        }
+
+        async function updateStatus(orderId, newStatus) {
+            try {
+                await ffPut('/farmer/orders/' + orderId + '/status', { status: newStatus });
+                if (detailsModal) detailsModal.hide();
+                await loadOrders();
+
+                if (newStatus === 'Confirmed') {
+                    showFarmerToast("Order Accepted! ✅", "Order #ORD" + orderId + " has been accepted successfully! The customer has been notified.", orderId);
+                } else if (newStatus === 'Cancelled') {
+                    showFarmerToast("Order Cancelled", "Order #ORD" + orderId + " was cancelled.", orderId);
+                }
+            } catch (err) {
+                alert('Could not update status: ' + err.message);
+            }
+        }
+
+        document.getElementById('modalAcceptBtn').addEventListener('click', function () {
+            if (selectedOrderId) updateStatus(selectedOrderId, 'Confirmed');
+        });
+
+        document.getElementById('modalCancelBtn').addEventListener('click', function () {
+            if (selectedOrderId) {
+                if (confirm('Are you sure you want to cancel this order?')) {
+                    updateStatus(selectedOrderId, 'Cancelled');
+                }
+            }
+        });
+
+        document.getElementById('modalSaveStatusBtn').addEventListener('click', function () {
+            if (selectedOrderId) {
+                const newStatus = document.getElementById('modalStatusSelect').value;
+                updateStatus(selectedOrderId, newStatus);
+            }
+        });
+
+        document.getElementById('filterTabs').addEventListener('click', function (e) {
+            const btn = e.target.closest('button[data-filter]');
+            if (!btn) return;
+            document.querySelectorAll('#filterTabs .btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter = btn.dataset.filter;
+            renderOrders();
+        });
+
+        async function initPage() {
+            await loadOrders();
+            const urlParams = new URLSearchParams(window.location.search);
+            const targetOrderId = urlParams.get('orderId');
+            if (targetOrderId) {
+                viewOrderById(targetOrderId);
+            }
+        }
+
+        initPage();
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmFresh - Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="api.js"></script>
+    <!-- Custom navbar (plain HTML/CSS/JS — no Bootstrap component behind it) -->
+<style>
+/* ============================================================
+   FarmFresh — shared site navbar
+   Pure HTML/CSS (no Bootstrap). Linked from every page.
+   ============================================================ */
+
+.ff-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: #16341f;
+    display: block;
+}
+
+.ff-nav-container {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+/* ---- brand / logo ---- */
+.ff-nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+.ff-nav-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #7DB13A;
+    background: #fff;
+}
+
+.ff-nav-brand span {
+    color: #fff;
+    font-size: 22px;
+    font-weight: 700;
+    font-family: Georgia, 'Times New Roman', serif;
+    letter-spacing: .3px;
+}
+
+/* ---- collapsible menu wrapper (mobile) ---- */
+.ff-nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    flex: 1;
+    justify-content: flex-end;
+}
+
+.ff-nav-links {
+    display: flex;
+    list-style: none;
+    gap: 24px;
+    margin: 0;
+    padding: 0;
+}
+
+.ff-nav-link {
+    color: #dfe7d8;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 6px 1px;
+    position: relative;
+    transition: color .2s ease;
+    white-space: nowrap;
+}
+
+.ff-nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 0;
+    height: 2px;
+    background: #7DB13A;
+    transition: width .25s ease;
+}
+
+.ff-nav-link:hover,
+.ff-nav-link.active {
+    color: #fff;
+}
+
+.ff-nav-link:hover::after,
+.ff-nav-link.active::after {
+    width: 100%;
+}
+
+/* ---- search ---- */
+.ff-nav-search {
+    display: flex;
+    align-items: center;
+}
+
+.ff-nav-search input {
+    background: rgba(255, 255, 255, .1);
+    border: 1px solid rgba(255, 255, 255, .28);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 20px 0 0 20px;
+    width: 190px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color .2s ease;
+}
+
+.ff-nav-search input::placeholder {
+    color: #c7d0bf;
+}
+
+.ff-nav-search input:focus {
+    border-color: #7DB13A;
+}
+
+.ff-nav-search button {
+    border: none;
+    background: #7DB13A;
+    color: #fff;
+    padding: 0 16px;
+    height: 36px;
+    border-radius: 0 20px 20px 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .2s ease;
+}
+
+.ff-nav-search button:hover {
+    background: #5f9626;
+}
+
+.ff-nav-search svg {
+    width: 15px;
+    height: 15px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+}
+
+/* ---- login / cart actions ---- */
+.ff-nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ff-nav-btn {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 9px 20px;
+    border-radius: 22px;
+    white-space: nowrap;
+    transition: background .2s ease, border-color .2s ease, color .2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.ff-nav-btn svg {
+    width: 15px;
+    height: 15px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+}
+
+.ff-nav-btn-outline {
+    color: #fff;
+    border: 1.5px solid rgba(255, 255, 255, .5);
+    background: transparent;
+}
+
+.ff-nav-btn-outline:hover,
+.ff-nav-btn-outline.active {
+    background: rgba(255, 255, 255, .12);
+    border-color: #fff;
+}
+
+.ff-nav-btn-fill {
+    background: #7DB13A;
+    color: #fff;
+    border: 1.5px solid #7DB13A;
+    position: relative;
+}
+
+.ff-nav-btn-fill:hover,
+.ff-nav-btn-fill.active {
+    background: #5f9626;
+    border-color: #5f9626;
+}
+
+.ff-cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    min-width: 20px;
+    height: 20px;
+    padding: 2px 5px;
+    border-radius: 50%;
+    background: #dc3545;
+    color: #fff;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    border: 2px solid #16341f;
+}
+
+/* ---- hamburger toggle (mobile) ---- */
+.ff-nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.ff-nav-toggle span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: #fff;
+    border-radius: 2px;
+    transition: transform .3s ease, opacity .3s ease;
+}
+
+.ff-nav-toggle.open span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.ff-nav-toggle.open span:nth-child(2) {
+    opacity: 0;
+}
+
+.ff-nav-toggle.open span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ---- responsive ---- */
+@media (max-width: 991px) {
+    .ff-nav-toggle {
+        display: flex;
+    }
+
+    .ff-nav-menu {
+        position: fixed;
+        top: 64px;
+        left: 0;
+        width: 100%;
+        max-height: 0;
+        overflow: hidden;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        background: #16341f;
+        transition: max-height .35s ease;
+        box-shadow: 0 8px 14px rgba(0, 0, 0, .15);
+    }
+
+    .ff-nav-menu.open {
+        max-height: 560px;
+        overflow-y: auto;
+    }
+
+    .ff-nav-links {
+        flex-direction: column;
+        gap: 0;
+        padding: 8px 24px 0;
+    }
+
+    .ff-nav-link {
+        padding: 13px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .ff-nav-link::after {
+        display: none;
+    }
+
+    .ff-nav-search {
+        padding: 16px 24px 0;
+    }
+
+    .ff-nav-search input {
+        flex: 1;
+        width: auto;
+    }
+
+    .ff-nav-actions {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 16px 24px 22px;
+        gap: 10px;
+    }
+
+    .ff-nav-btn {
+        justify-content: center;
+    }
+
+}
+
+@media (max-width: 400px) {
+    .ff-nav-container {
+        padding: 8px 16px;
+    }
+
+    .ff-nav-brand span {
+        font-size: 19px;
+    }
+
+    .ff-nav-menu {
+        top: 56px;
+    }
+}
+
+</style>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        html, body {
+            background: white;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* ===== Head text ===== */
+        .head h1 {
+            font-family: 'Times New Roman', Times, serif;
+            color: red;
+        }
+
+        .head p {
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            color: brown;
+        }
+
+        /* ===== Footer ===== */
+        footer {
+            width: 100%;
+            background: #CECED9;
+            padding: 70px 8%;
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-box h3 {
+            margin-bottom: 25px;
+            font-size: 24px;
+            color: #000;
+        }
+
+        .footer-box p {
+            color: #666;
+            line-height: 32px;
+            font-size: 18px;
+        }
+
+        .footer-box ul {
+            list-style: none;
+        }
+
+        .footer-box ul li {
+            margin: 18px 0;
+        }
+
+        .footer-box ul li a {
+            text-decoration: none;
+            color: #444;
+            font-size: 18px;
+            transition: .3s;
+        }
+
+        .footer-box ul li a:hover {
+            color: #82ae46;
+            padding-left: 5px;
+        }
+
+        .contact li {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            color: #555;
+            line-height: 30px;
+        }
+
+        .contact i {
+            margin-top: 6px;
+        }
+
+        .social {
+            margin-top: 40px;
+        }
+
+        .social a {
+            width: 55px;
+            height: 55px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            background: #f5f5f5;
+            border-radius: 50%;
+            color: #000;
+            font-size: 22px;
+            margin-right: 15px;
+            text-decoration: none;
+            transition: .3s;
+        }
+
+        .social a:hover {
+            background: #82ae46;
+            color: #fff;
+        }
+
+        .copy {
+            text-align: center;
+            margin-top: 70px;
+            color: #555;
+            font-size: 17px;
+        }
+
+        .copy span {
+            color: #82ae46;
+        }
+
+        @media(max-width:768px) {
+
+            footer {
+                padding: 50px 25px;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 35px;
+            }
+
+            .footer-box h3 {
+                font-size: 22px;
+            }
+
+            .footer-box p,
+            .footer-box ul li a {
+                font-size: 16px;
+            }
+
+            .social {
+                text-align: center;
+            }
+
+            .copy {
+                font-size: 15px;
+                line-height: 28px;
+            }
+
+        }
+
+        /* ===== Category preview grid ===== */
+        .container1 {
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+            align-items: center;
+            min-height: 750px;
+        }
+
+        .sided {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .carded {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            border-radius: 10px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, .12);
+        }
+
+        .carded img {
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+            display: block;
+            transition: .5s;
+        }
+
+        .carded:hover img {
+            transform: scale(1.08);
+        }
+
+        .label {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            background: #7DB13A;
+            color: #fff;
+            padding: 12px 22px;
+            font-size: 22px;
+        }
+
+        .centered {
+            text-align: center;
+        }
+
+        .centered h1 {
+            font-size: 48px;
+            color: #7DB13A;
+            font-family: Georgia, serif;
+            margin-bottom: 15px;
+        }
+
+        .centered p {
+            font-size: 28px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .btned {
+            display: inline-block;
+            padding: 16px 40px;
+            background: #7DB13A;
+            color: #fff;
+            text-decoration: none;
+            font-size: 24px;
+            border-radius: 40px;
+            transition: .3s;
+        }
+
+        .btned:hover {
+            background: #5f9626;
+        }
+
+        .centered img {
+            width: 100%;
+            max-width: 500px;
+            margin-top: 40px;
+            border-radius: 10px;
+        }
+
+        @media(max-width:1100px) {
+
+            .container1 {
+                grid-template-columns: 1fr;
+                height: auto;
+                min-height: auto;
+                align-items: stretch;
+                gap: 35px;
+                padding: 30px 20px;
+            }
+
+            .centered {
+                order: -1;
+            }
+
+            .sided {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+
+            .carded img {
+                height: 280px;
+            }
+
+            .centered img {
+                max-width: 440px;
+                margin-top: 25px;
+            }
+
+        }
+
+        @media(max-width:768px) {
+
+            .hero1 {
+                height: auto;
+                min-height: 420px;
+                padding: 60px 20px;
+            }
+
+            .hero1 h1 {
+                font-size: 30px;
+                line-height: 1.3;
+            }
+
+            .hero1 p {
+                font-size: 16px;
+                margin: 14px 0 24px;
+            }
+
+            .container1 {
+                padding: 20px 16px;
+                gap: 25px;
+            }
+
+            .sided {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .centered h1 {
+                font-size: 32px;
+            }
+
+            .centered p {
+                font-size: 18px;
+                margin-bottom: 20px;
+            }
+
+            .btned {
+                font-size: 18px;
+                padding: 12px 30px;
+            }
+
+            .carded img {
+                height: 230px;
+            }
+
+            .centered img {
+                max-width: 100%;
+                margin-top: 20px;
+            }
+
+            .label {
+                font-size: 18px;
+                padding: 10px 18px;
+            }
+
+        }
+
+        @media(max-width:480px) {
+
+            .hero1 h1 {
+                font-size: 24px;
+            }
+
+            .hero1 p {
+                font-size: 15px;
+            }
+
+            .centered h1 {
+                font-size: 26px;
+            }
+
+            .centered p {
+                font-size: 15px;
+            }
+
+            .btned {
+                font-size: 16px;
+                padding: 10px 24px;
+            }
+
+            .carded img {
+                height: 200px;
+            }
+
+            .label {
+                font-size: 15px;
+                padding: 8px 14px;
+            }
+
+        }
+
+        /* ===== Hero ===== */
+        .hero1 {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                url("https://i.pinimg.com/1200x/76/21/ea/7621ead8cd1bdbd10264dd281b2fd80f.jpg");
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 80px 20px;
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero1 h1 {
+            font-size: 42px;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            color: #c5e49a;
+            max-width: 780px;
+        }
+
+        .hero1 p {
+            font-size: 18px;
+            max-width: 620px;
+            margin: 18px 0 30px;
+        }
+
+        /* ===== Feature-strip section ===== */
+        .farmfresh-section {
+            width: 100%;
+            min-height: 620px;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            background: #f5f7f2;
+        }
+
+        .farm-image {
+            width: 50%;
+            height: 620px;
+            overflow: hidden;
+        }
+
+        .farm-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .farm-content {
+            width: 50%;
+            padding: 50px 7%;
+        }
+
+        .small-title {
+            color: #78ad3c;
+            font-size: 22px;
+            font-style: italic;
+            font-family: Georgia, serif;
+            margin-bottom: 25px;
+        }
+
+        .farm-content h1 {
+            font-size: 48px;
+            line-height: 1.1;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+
+        .description {
+            color: #777;
+            font-size: 18px;
+            line-height: 1.7;
+            max-width: 600px;
+            margin-bottom: 28px;
+        }
+
+        .product-name {
+            color: #78ad3c;
+            font-size: 38px;
+            font-family: Georgia, serif;
+            margin-bottom: 20px;
+        }
+
+        .price {
+            font-size: 21px;
+            color: #555;
+            margin-bottom: 35px;
+        }
+
+        .price strong {
+            color: #78ad3c;
+            font-size: 24px;
+        }
+
+        .shop-btn {
+            display: inline-block;
+            background: #78ad3c;
+            color: white;
+            text-decoration: none;
+            padding: 15px 35px;
+            border-radius: 30px;
+            font-size: 17px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .shop-btn:hover {
+            background: #5f922b;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .features {
+            display: flex;
+            gap: 35px;
+            margin-top: 40px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #555;
+            font-size: 15px;
+        }
+
+        .feature span {
+            font-size: 25px;
+        }
+
+        @media(max-width:900px) {
+
+            .farmfresh-section {
+                flex-direction: column;
+                min-height: auto;
+            }
+
+            .farm-image {
+                width: 100%;
+                height: 430px;
+            }
+
+            .farm-content {
+                width: 100%;
+                padding: 45px 8%;
+                text-align: center;
+            }
+
+            .description {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .features {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+        }
+
+        @media(max-width:600px) {
+
+            .farm-image {
+                height: 300px;
+            }
+
+            .farm-content {
+                padding: 35px 22px;
+            }
+
+            .small-title {
+                font-size: 18px;
+                margin-bottom: 18px;
+            }
+
+            .farm-content h1 {
+                font-size: 34px;
+            }
+
+            .description {
+                font-size: 15px;
+                line-height: 1.6;
+            }
+
+            .product-name {
+                font-size: 30px;
+            }
+
+            .price {
+                font-size: 18px;
+            }
+
+            .price strong {
+                font-size: 21px;
+            }
+
+            .features {
+                gap: 18px;
+            }
+
+            .feature {
+                font-size: 13px;
+            }
+        }
+
+        /* ===== Testimonials ===== */
+        .testimonial {
+            width: 100%;
+            padding: 70px 6% 80px;
+            text-align: center;
+        }
+
+        .testimonial .small-title {
+            color: #78b82a;
+            font-size: 20px;
+            font-style: italic;
+            margin-bottom: 25px;
+        }
+
+        .testimonial h1 {
+            font-size: 46px;
+            font-weight: 700;
+            margin-bottom: 35px;
+        }
+
+        .testimonial .description {
+            max-width: 720px;
+            margin: auto;
+            color: #999;
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .testimonial-container {
+            max-width: 1150px;
+            margin: 115px auto 0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 35px;
+        }
+
+        .card18 {
+            text-align: center;
+        }
+
+        .customer-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 55px;
+        }
+
+        .quote {
+            position: relative;
+            border-left: 2px solid #eee;
+            padding: 0 25px 0 35px;
+            min-height: 130px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quote:before {
+            content: "";
+            position: absolute;
+            left: -3px;
+            top: 48px;
+            width: 4px;
+            height: 37px;
+            background: #79bd32;
+        }
+
+        .quote p {
+            color: #444;
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .name {
+            margin-top: 60px;
+            font-size: 21px;
+            font-weight: 500;
+        }
+
+        .role {
+            margin-top: 15px;
+            font-size: 13px;
+            letter-spacing: 3px;
+            color: #555;
+        }
+
+        @media(max-width:900px) {
+
+            .testimonial {
+                padding: 60px 5%;
+            }
+
+            .testimonial h1 {
+                font-size: 38px;
+            }
+
+            .testimonial .description {
+                font-size: 16px;
+            }
+
+            .testimonial-container {
+                grid-template-columns: 1fr 1fr;
+                margin-top: 80px;
+            }
+
+            .card18:last-child {
+                grid-column: 1 / -1;
+                max-width: 500px;
+                width: 100%;
+                margin: auto;
+            }
+        }
+
+        @media(max-width:600px) {
+
+            .testimonial {
+                padding: 50px 20px;
+            }
+
+            .testimonial .small-title {
+                font-size: 18px;
+                margin-bottom: 18px;
+            }
+
+            .testimonial h1 {
+                font-size: 30px;
+                line-height: 1.3;
+                margin-bottom: 25px;
+            }
+
+            .testimonial .description {
+                font-size: 15px;
+                line-height: 1.7;
+            }
+
+            .testimonial-container {
+                grid-template-columns: 1fr;
+                margin-top: 65px;
+                gap: 70px;
+            }
+
+            .customer-img {
+                width: 105px;
+                height: 105px;
+                margin-bottom: 40px;
+            }
+
+            .quote {
+                min-height: auto;
+                padding: 0 20px 0 30px;
+            }
+
+            .quote p {
+                font-size: 16px;
+                line-height: 1.7;
+            }
+
+            .name {
+                margin-top: 35px;
+                font-size: 19px;
+            }
+
+            .role {
+                margin-top: 10px;
+                font-size: 11px;
+                letter-spacing: 2px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="ff-header">
+        <div class="ff-nav-container">
+            <a class="ff-nav-brand" href="frounted.html">
+                <img src="pic41.jpeg" alt="FarmFresh logo" class="ff-nav-logo">
+                <span>FarmFresh</span>
+            </a>
+
+            <button class="ff-nav-toggle" id="navToggle" type="button" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+
+            <nav class="ff-nav-menu" id="navMenu">
+                <ul class="ff-nav-links">
+                    <li><a class="ff-nav-link active" href="frounted.html">Home</a></li>
+                    <li><a class="ff-nav-link" href="ourproduct.html">Shop</a></li>
+                    <li><a class="ff-nav-link" href="contact.html">Contact</a></li>
+                </ul>
+
+                <form class="ff-nav-search" id="siteSearchForm" role="search">
+                    <input type="search" id="siteSearchInput" placeholder="Search products" aria-label="Search products">
+                    <button type="submit" aria-label="Search">
+                        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </button>
+                </form>
+
+                <div class="ff-nav-actions">
+                    <a class="ff-nav-btn ff-nav-btn-outline" href="loginpage.html">
+                        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        Login
+                    </a>
+                    <a class="ff-nav-btn ff-nav-btn-fill" href="mycard.html">
+                        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        My Cart
+                        <span id="cartBadge" class="ff-cart-badge">0</span>
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="hero1">
+        <h1>We serve the fresh vegetable and fruits</h1>
+        <p>Bringing farm-fresh fruits and vegetables to your doorstep.
+            Freshness, quality, and health in every order</p>
+        <a class="btn btn-primary" href="ourproduct.html" role="button">shop Now</a>
+    </div>
+
+    <br>
+    <br>
+
+    <div class="container mt-5 mb-5">
+        <h2 class="text-center text-success mb-4">Our Features</h2>
+
+        <div class="row g-4">
+
+            <div class="col-md-4">
+                <div class="card shadow">
+                    <div class="card-body text-center">
+                        <h4>🌾 Fresh Products</h4>
+                        <p>From farm to your table.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow">
+                    <div class="card-body text-center">
+                        <h4>💰 Best Prices</h4>
+                        <p>Affordable prices without any middlemen.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow">
+                    <div class="card-body text-center">
+                        <h4>🚚 Fast Delivery</h4>
+                        <p>Quick and reliable delivery to your doorstep.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <br>
+
+    <div class="container1">
+
+        <div class="sided">
+
+            <div class="carded">
+                <img src="pic115.jpg" alt="Fresh fruits basket">
+                <div class="label">Fruits</div>
+            </div>
+
+            <div class="carded">
+                <img src="pic114.jpg" alt="Fresh vegetables crate">
+                <div class="label">Vegetables</div>
+            </div>
+
+        </div>
+
+        <div class="centered">
+
+            <h1>Vegetables</h1>
+
+            <p>Protect the health of every home</p>
+
+            <a href="ourproduct.html" class="btned">Shop now</a>
+
+            <img src="pic113.jpg" alt="Assorted fresh vegetables">
+
+        </div>
+
+        <div class="sided">
+
+            <div class="carded">
+                <img src="pic117.jpg" alt="Whole and ground spices">
+                <div class="label">Spices</div>
+            </div>
+
+            <div class="carded">
+                <img src="pic116.jpg" alt="Sacks of grains">
+                <div class="label">Grains</div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <br>
+    <br>
+
+    <section class="farmfresh-section">
+
+        <div class="farm-image">
+            <img src="pic1223.jpg" alt="Fresh Farm Vegetables">
+        </div>
+
+        <div class="farm-content">
+
+            <div class="small-title">
+                Fresh From The Farm
+            </div>
+
+            <h1>
+                FarmFresh
+            </h1>
+
+            <p class="description">
+                Fresh vegetables, fruits and grains directly from
+                trusted farmers. Get healthy and quality farm products
+                delivered fresh to your doorstep.
+            </p>
+
+            <div class="product-name">
+                Fresh Vegetables
+            </div>
+
+            <div class="price">
+                Starting from
+                <strong>₹49 only</strong>
+            </div>
+
+            <a href="ourproduct.html" class="shop-btn">
+                Shop Now
+            </a>
+
+            <div class="features">
+
+                <div class="feature">
+                    <span>🌱</span>
+                    <p>Farm Fresh</p>
+                </div>
+
+                <div class="feature">
+                    <span>🚚</span>
+                    <p>Fast Delivery</p>
+                </div>
+
+                <div class="feature">
+                    <span>✓</span>
+                    <p>Quality Products</p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <br>
+
+    <section class="testimonial">
+
+        <div class="small-title">Testimonials</div>
+
+        <h1>What Our FarmFresh Customers Say</h1>
+
+        <p class="description">
+            Fresh products, trusted farmers, and happy customers.
+            See what our customers have to say about their FarmFresh experience.
+        </p>
+
+        <div class="testimonial-container">
+
+            <div class="card18">
+
+                <img
+                    class="customer-img"
+                    src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80"
+                    alt="FarmFresh Customer">
+
+                <div class="quote">
+                    <p>
+                        FarmFresh gives me fresh vegetables and fruits
+                        directly from trusted local farmers.
+                    </p>
+                </div>
+
+                <h3 class="name">Rahul Patil</h3>
+                <p class="role">FARMFRESH CUSTOMER</p>
+
+            </div>
+
+            <div class="card18">
+
+                <img
+                    class="customer-img"
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80"
+                    alt="FarmFresh Customer">
+
+                <div class="quote">
+                    <p>
+                        The quality is excellent and the products
+                        always feel fresh and natural.
+                    </p>
+                </div>
+
+                <h3 class="name">Amit Sharma</h3>
+                <p class="role">MARKETING MANAGER</p>
+
+            </div>
+
+            <div class="card18">
+
+                <img
+                    class="customer-img"
+                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80"
+                    alt="FarmFresh Customer">
+
+                <div class="quote">
+                    <p>
+                        I love buying directly from farmers.
+                        FarmFresh makes healthy shopping simple.
+                    </p>
+                </div>
+
+                <h3 class="name">Priya Sharma</h3>
+                <p class="role">FARMFRESH CUSTOMER</p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <br>
+    <br>
+
+    <footer>
+
+        <div class="footer-container">
+
+            <div class="footer-box">
+                <h3>Vegefoods</h3>
+
+                <p>
+                    Bringing farm-fresh vegetables and fruits directly to your doorstep.
+                    Quality, freshness, and healthy living at affordable prices.
+                </p>
+
+                <div class="social">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+
+            </div>
+
+            <div class="footer-box">
+                <h3>Menu</h3>
+
+                <ul>
+                    <li><a href="frounted.html">Home</a></li>
+                    <li><a href="contact.html">About</a></li>
+                    <li><a href="ourproduct.html">shop</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                </ul>
+
+            </div>
+
+            <div class="footer-box">
+
+                <h3>Help</h3>
+
+                <ul>
+                    <li><a href="#">Order Information</a></li>
+                    <li><a href="#">Complent</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Contact for farmer</a></li>
+                </ul>
+
+            </div>
+
+            <div class="footer-box">
+
+                <h3>Have a Questions?</h3>
+
+                <ul class="contact">
+
+                    <li>
+                        <i class="fas fa-location-dot"></i>
+                        Pune , Maharashtra <br>
+                    </li>
+
+                    <li>
+                        <i class="fas fa-phone"></i>
+                        +91 738 5130 309
+                    </li>
+
+                    <li>
+                        <i class="fas fa-envelope"></i>
+                        farmfresh@gmail.com
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+        <div class="copy">
+            Copyright ©2026 All rights reserved |
+            This template is made with
+            by <span>Farmfresh</span>
+        </div>
+
+    </footer>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    /* ---- mobile menu toggle ---- */
+    var toggle = document.getElementById("navToggle");
+    var menu = document.getElementById("navMenu");
+
+    if (toggle && menu) {
+        toggle.addEventListener("click", function () {
+            var isOpen = menu.classList.toggle("open");
+            toggle.classList.toggle("open", isOpen);
+            toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        });
+
+        menu.querySelectorAll(".ff-nav-link").forEach(function (link) {
+            link.addEventListener("click", function () {
+                menu.classList.remove("open");
+                toggle.classList.remove("open");
+                toggle.setAttribute("aria-expanded", "false");
+            });
+        });
+    }
+
+    /* ---- shared cart badge (one source of truth for every page) ---- */
+    var CART_KEY = "farmfreshCart";
+
+    function ffGetCart() {
+        try {
+            return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function ffSaveCart(cart) {
+        localStorage.setItem(CART_KEY, JSON.stringify(cart));
+        ffUpdateBadge();
+    }
+
+    function ffUpdateBadge() {
+        var badge = document.getElementById("cartBadge");
+        if (!badge) return;
+
+        var count = ffGetCart().reduce(function (sum, item) {
+            return sum + Number(item.quantity || 0);
+        }, 0);
+
+        badge.textContent = count;
+        badge.style.display = count > 0 ? "flex" : "none";
+    }
+
+    // exposed so each page's own script can reuse the same cart helpers
+    // instead of redefining getCart/saveCart/updateBadge on every page
+    window.ffCart = {
+        get: ffGetCart,
+        save: ffSaveCart,
+        updateBadge: ffUpdateBadge
+    };
+
+    ffUpdateBadge();
+
+    /* ---- navbar search ----
+       On the shop page itself the search filters the grid in place
+       (ourproduct.html defines window.ffApplyNavSearch). Everywhere
+       else it just hands the query to the shop page via the URL. */
+    var searchForm = document.getElementById("siteSearchForm");
+    var searchInput = document.getElementById("siteSearchInput");
+
+    if (searchForm) {
+        searchForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            var query = (searchInput.value || "").trim();
+
+            if (typeof window.ffApplyNavSearch === "function") {
+                window.ffApplyNavSearch(query);
+                menu && menu.classList.remove("open");
+                toggle && toggle.classList.remove("open");
+            } else {
+                window.location.href =
+                    "ourproduct.html" + (query ? ("?search=" + encodeURIComponent(query)) : "");
+            }
+        });
+    }
+
+    if (typeof window.ffInitNavbarAuth === "function") {
+        window.ffInitNavbarAuth();
+    }
+});
+</script>
+</body>
+
+</html>

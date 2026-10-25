@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmFresh — Project Presentation Slides</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        :root {
+            --leaf: #2E8B57;
+            --leaf-dark: #1B5E20;
+            --leaf-deep: #16341f;
+            --turmeric: #E8A33D;
+            --ink: #1F2A1A;
+            --paper: #f4f6f3;
+            --card-bg: #ffffff;
+            --accent-red: #d9534f;
+            --border-color: #e0e5df;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #0f2416;
+            color: var(--ink);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        /* Top control bar */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 54px;
+            background: rgba(22, 52, 31, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            color: #fff;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .top-brand {
+            font-family: 'Bitter', serif;
+            font-weight: 700;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #d9ffd7;
+        }
+
+        .top-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-ctrl {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-ctrl:hover {
+            background: var(--turmeric);
+            color: var(--ink);
+            border-color: var(--turmeric);
+        }
+
+        .slide-counter {
+            font-size: 14px;
+            font-weight: 600;
+            color: #d9ffd7;
+            padding: 0 8px;
+        }
+
+        /* Progress Bar */
+        .progress-bar-wrap {
+            position: fixed;
+            top: 54px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 999;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--turmeric);
+            width: 7.14%;
+            transition: width 0.3s ease;
+        }
+
+        /* Main Slide Container */
+        .presentation-container {
+            width: 100%;
+            max-width: 1150px;
+            margin: 80px 20px 80px;
+            min-height: 640px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            background: var(--card-bg);
+            border-radius: 18px;
+            padding: 45px 50px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px) scale(0.99);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Slide Typography */
+        .slide-badge {
+            display: inline-block;
+            background: #eef7ee;
+            color: var(--leaf-dark);
+            border: 1px solid #c2e2c2;
+            padding: 4px 14px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 14px;
+        }
+
+        .slide-title {
+            font-family: 'Bitter', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--leaf-deep);
+            margin-bottom: 8px;
+            line-height: 1.25;
+        }
+
+        .slide-subtitle {
+            font-size: 16px;
+            color: #667566;
+            margin-bottom: 24px;
+            font-weight: 500;
+        }
+
+        /* Marathish translation block */
+        .marathish-box {
+            background: #fbfbf6;
+            border-left: 4px solid var(--turmeric);
+            border-radius: 0 10px 10px 0;
+            padding: 12px 18px;
+            margin: 16px 0 24px 0;
+            font-size: 14.5px;
+            color: #4a5446;
+            line-height: 1.5;
+        }
+
+        .marathish-box strong {
+            color: var(--leaf-deep);
+        }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 15px 0;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin: 15px 0;
+        }
+
+        .card-box {
+            background: #f8faf8;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            transition: transform 0.2s;
+        }
+
+        .card-box:hover {
+            transform: translateY(-2px);
+            border-color: var(--leaf);
+        }
+
+        .card-box h4 {
+            font-size: 16px;
+            color: var(--leaf-deep);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-box p {
+            font-size: 13.5px;
+            color: #555;
+            line-height: 1.45;
+        }
+
+        /* Tables in slides */
+        .slide-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 14px 0;
+            font-size: 13.5px;
+        }
+
+        .slide-table th {
+            background: #eef5ee;
+            color: var(--leaf-deep);
+            text-align: left;
+            padding: 10px 14px;
+            font-weight: 600;
+            border-bottom: 2px solid #d0e0d0;
+        }
+
+        .slide-table td {
+            padding: 9px 14px;
+            border-bottom: 1px solid #edf2ed;
+            color: #444;
+        }
+
+        .slide-table tr:hover td {
+            background: #fdfefd;
+        }
+
+        /* Code block */
+        .code-box {
+            background: #18241b;
+            color: #c9e6cb;
+            padding: 16px 20px;
+            border-radius: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            overflow-x: auto;
+            margin: 14px 0;
+            border: 1px solid #2d4533;
+        }
+
+        /* Status Badge */
+        .badge-pill {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11.5px;
+            font-weight: 600;
+        }
+        .badge-green { background: #e0f7e6; color: #1b7a3d; }
+        .badge-blue { background: #e0eefe; color: #1a5ba6; }
+        .badge-yellow { background: #fff3d9; color: #8a6100; }
+        .badge-red { background: #fbe9e7; color: #96281c; }
+
+        /* Floating Bottom Controls */
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            display: flex;
+            gap: 14px;
+            z-index: 1000;
+        }
+
+        .nav-btn-round {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--leaf-deep);
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn-round:hover {
+            background: var(--turmeric);
+            color: var(--ink);
+            transform: scale(1.08);
+        }
+
+        /* Print Mode */
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            .top-bar, .progress-bar-wrap, .bottom-nav {
+                display: none !important;
+            }
+            .presentation-container {
+                margin: 0;
+                max-width: 100%;
+            }
+            .slide {
+                display: block !important;
+                page-break-after: always;
+                box-shadow: none;
+                border: 1px solid #ccc;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Top Navigation Bar -->
+    <div class="top-bar">
+        <div class="top-brand">
+            🌾 FarmFresh <span>Project Presentation</span>
+        </div>
+        <div class="top-controls">
+            <button class="btn-ctrl" onclick="toggleFullScreen()"><i class="bi bi-arrows-fullscreen"></i> Fullscreen</button>
+            <button class="btn-ctrl" onclick="window.print()"><i class="bi bi-printer"></i> Print / PDF</button>
+            <span class="slide-counter" id="slideIndicator">Slide 1 / 14</span>
+        </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+
+    <!-- Slides Container -->
+    <div class="presentation-container">
+
+        <!-- SLIDE 1: Title Slide -->
+        <div class="slide active" id="slide-1">
+            <div class="slide-badge">🌾 Capstone Project Presentation</div>
+            <h1 class="slide-title" style="font-size:38px;margin-top:10px;">FarmFresh — Direct Farmer to Consumer Marketplace</h1>
+            <p class="slide-subtitle" style="font-size:18px;">Empowering Farmers with Fair Margins & Providing Consumers Pure Organic Produce</p>
+
+            <div class="marathish-box">
+                <strong>🚩 Project Vision (मराठीत माहिती):</strong><br>
+                FarmFresh ha ek modern agri-tech e-commerce platform ahe. Yachya madhyamatun **Shetkari (Farmer)** aapla taaza shetmaal kontyahi dalal (middlemen) shivay direct **Grahak (Customer)** la viku shakto. Shetkaryala purna nafa milto ani grahakala taaja maal kami daamat milto.
+            </div>
+
+            <div class="grid-3" style="margin-top:25px;">
+                <div class="card-box">
+                    <h4>👨‍🌾 Farmer Empowerment</h4>
+                    <p>Farmers list produce with custom prices, manage inventory, and directly accept or cancel customer orders.</p>
+                </div>
+                <div class="card-box">
+                    <h4>🛒 Consumer Freshness</h4>
+                    <p>Customers explore categories, add to cart with live calculations, and place verified doorstep delivery orders.</p>
+                </div>
+                <div class="card-box">
+                    <h4>🛡️ Admin Oversight</h4>
+                    <p>Platform admins moderate products, verify farmer profiles, inspect order splits, and manage customer inquiries.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: Problem & Solution -->
+        <div class="slide" id="slide-2">
+            <div class="slide-badge">Problem Statement vs Solution</div>
+            <h2 class="slide-title">Why FarmFresh? (सध्याची समस्या आणि उपाय)</h2>
+            <p class="slide-subtitle">Solving the broken traditional agricultural supply chain in India.</p>
+
+            <div class="marathish-box">
+                <strong>🚩 Samasya Kay Hoti?</strong> Traditional market madhe agent/dalal 30% te 50% commission ghetat, jyana shetkaryala kami bhav milto ani maal customer paryant pocheparyant shila hoto. <strong>FarmFresh he dalal completely hatavto!</strong>
+            </div>
+
+            <div class="grid-2">
+                <div class="card-box" style="border-left:4px solid var(--accent-red);">
+                    <h4 style="color:var(--accent-red);"><i class="bi bi-x-circle-fill"></i> Traditional Market Flaws</h4>
+                    <ul style="margin-left:18px;font-size:13.5px;color:#555;line-height:1.7;">
+                        <li>Heavy middlemen cuts (30%–50% lost in transit).</li>
+                        <li>Produce stored in mandi godowns for days, losing vitamins.</li>
+                        <li>Rural farmers lack digital discovery and customer access.</li>
+                        <li>No direct customer feedback or dynamic pricing power.</li>
+                    </ul>
+                </div>
+                <div class="card-box" style="border-left:4px solid var(--leaf);">
+                    <h4 style="color:var(--leaf);"><i class="bi bi-check-circle-fill"></i> FarmFresh Digital Solution</h4>
+                    <ul style="margin-left:18px;font-size:13.5px;color:#555;line-height:1.7;">
+                        <li><strong>0% Brokerage</strong>: 100% price control stays with the farmer.</li>
+                        <li>Direct harvest-to-home logistics ensures top freshness.</li>
+                        <li>Web-based farmer dashboard accessible on mobile/laptop.</li>
+                        <li>Live order notifications and clear status workflow.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: Tech Stack & Versions -->
+        <div class="slide" id="slide-3">
+            <div class="slide-badge">Technology Architecture</div>
+            <h2 class="slide-title">Technology Stack & Exact Versions</h2>
+            <p class="slide-subtitle">Built with enterprise-grade Java, Spring Boot, and responsive web standards.</p>
+
+            <table class="slide-table">
+                <thead>
+                    <tr>
+                        <th>Layer</th>
+                        <th>Technology</th>
+                        <th>Exact Version</th>
+                        <th>Purpose & Role</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Runtime</strong></td>
+                        <td>Java OpenJDK</td>
+                        <td><span class="badge-pill badge-green">Java 25 (LTS)</span></td>
+                        <td>High-performance virtual threads, modern language features.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Backend Framework</strong></td>
+                        <td>Spring Boot</td>
+                        <td><span class="badge-pill badge-green">v3.5.5</span></td>
+                        <td>RESTful controllers, dependency injection, auto-configuration.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ORM / Persistence</strong></td>
+                        <td>Hibernate / JPA</td>
+                        <td><span class="badge-pill badge-blue">v6.6.26.Final</span></td>
+                        <td>Object-Relational Mapping with MySQL transaction management.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Database Server</strong></td>
+                        <td>MySQL Community</td>
+                        <td><span class="badge-pill badge-yellow">v8.0.46</span></td>
+                        <td>ACID compliant relational storage with cascade constraints.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Web Server</strong></td>
+                        <td>Apache Tomcat</td>
+                        <td><span class="badge-pill badge-green">v10.1.44</span></td>
+                        <td>High-throughput embedded servlet container on port 8080.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Frontend UI</strong></td>
+                        <td>Bootstrap & CSS3</td>
+                        <td><span class="badge-pill badge-blue">v5.3.8</span></td>
+                        <td>Responsive grid, custom modals, typography, and badges.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="marathish-box">
+                <strong>🚩 Tech Stack Summary:</strong> Backend madhe **Spring Boot 3.5.5** ani **Java 25** ahe, Database madhe **MySQL 8.0** ahe, ani Frontend **HTML5, CSS3, JavaScript ES6** ani **Bootstrap 5.3.8** var tayar kelela ahe.
+            </div>
+        </div>
+
+        <!-- SLIDE 4: System Architecture -->
+        <div class="slide" id="slide-4">
+            <div class="slide-badge">System Design</div>
+            <h2 class="slide-title">3-Tier System Architecture & Data Flow</h2>
+            <p class="slide-subtitle">Clean separation of concerns with RESTful API communication.</p>
+
+            <div class="code-box">
+[ Browser Client (HTML5 / CSS3 / ES6 api.js) ]
+       │  ▲
+       │  │  HTTP/JSON REST API Requests & Responses
+       ▼  │
+[ Spring Boot Controller Layer (@RestController) ]
+       ├── AuthController (/api/auth)
+       ├── CustomerController (/api/customer)
+       ├── FarmerController (/api/farmer)
+       ├── AdminController (/api/admin)
+       └── OrderController (/api/orders)
+       │  ▲
+       ▼  │
+[ Business Service Layer (@Service) ]
+       ├── AuthService, OrderService, ProductService, AdminService
+       │  ▲
+       ▼  │
+[ Data Access Layer (@Repository - Spring Data JPA) ]
+       └── CustomerRepository, FarmerRepository, ProductRepository, OrderRepository
+       │  ▲
+       ▼  │  JDBC SQL Execution via HikariCP Pool
+[ MySQL 8.0 Database (farmfresh) ]
+            </div>
+
+            <div class="marathish-box">
+                <strong>🚩 Kasa Chalto Flow?</strong> User browser madhun click karto -> `api.js` request Spring Boot chya Controller la pathavto -> Service layer madhe business logic verify hote -> Spring Data JPA marfat MySQL Database madhe data save kiva fetch hoto.
+            </div>
+        </div>
+
+        <!-- SLIDE 5: Database Schema -->
+        <div class="slide" id="slide-5">
+            <div class="slide-badge">Database Design</div>
+            <h2 class="slide-title">Database Schema & Entity Relationships</h2>
+            <p class="slide-subtitle">Relational tables with historical snapshot protection.</p>
+
+            <div class="grid-3">
+                <div class="card-box">
+                    <h4>👥 customers</h4>
+                    <p><code>id (PK)</code>, <code>full_name</code>, <code>email (UK)</code>, <code>password (BCrypt)</code>, <code>mobile</code>, <code>city</code>, <code>state</code>, <code>status</code></p>
+                </div>
+                <div class="card-box">
+                    <h4>👨‍🌾 farmers</h4>
+                    <p><code>id (PK)</code>, <code>full_name</code>, <code>email (UK)</code>, <code>password</code>, <code>farm_name</code>, <code>mobile</code>, <code>farm_address</code>, <code>city</code>, <code>pincode</code>, <code>status</code></p>
+                </div>
+                <div class="card-box">
+                    <h4>🥦 products</h4>
+                    <p><code>id (PK)</code>, <code>farmer_id (FK)</code>, <code>name</code>, <code>category</code>, <code>price</code>, <code>quantity</code>, <code>unit</code>, <code>image_url (LONGTEXT)</code>, <code>status</code></p>
+                </div>
+                <div class="card-box">
+                    <h4>📦 orders</h4>
+                    <p><code>id (PK)</code>, <code>customer_id (FK)</code>, <code>name</code>, <code>phone</code>, <code>email</code>, <code>address</code>, <code>city</code>, <code>state</code>, <code>pin</code>, <code>subtotal</code>, <code>delivery_fee</code>, <code>total</code>, <code>status</code></p>
+                </div>
+                <div class="card-box">
+                    <h4>📋 order_items</h4>
+                    <p><code>id (PK)</code>, <code>order_id (FK)</code>, <code>product_id (FK_NULL)</code>, <code>product_name</code>, <code>farmer_name</code>, <code>price</code>, <code>quantity</code>, <code>unit</code></p>
+                </div>
+                <div class="card-box">
+                    <h4>✉️ contact_messages</h4>
+                    <p><code>id (PK)</code>, <code>name</code>, <code>email</code>, <code>subject</code>, <code>message</code>, <code>created_at</code>, <code>status</code></p>
+                </div>
+            </div>
+
+            <div class="marathish-box">
+                <strong>💡 Smart Feature (Historical Snapshots):</strong> `order_items` table madhe product chi daam ani naav order kartana snapshot mhanun save hote. Mhanje shetkaryane nantar bhav badalla tari juni order history bilkul chukat nahi!
+            </div>
+        </div>
+
+        <!-- SLIDE 6: Customer Module -->
+        <div class="slide" id="slide-6">
+            <div class="slide-badge">User Module</div>
+            <h2 class="slide-title">Customer Experience & Storefront Flow</h2>
+            <p class="slide-subtitle">Fast, accessible, and responsive marketplace navigation.</p>
+
+            <div class="grid-3">
+                <div class="card-box">
+                    <h4>1. Explore & Search</h4>
+                    <p><code>frounted.html</code> & <code>ourproduct.html</code> allow live search and category filtering (Vegetables, Fruits, Grains, Spices).</p>
+                </div>
+                <div class="card-box">
+                    <h4>2. Add to Cart</h4>
+                    <p>Single click adds produce to local basket with visual feedback ("Added ✓") and updates header badge counter dynamically.</p>
+                </div>
+                <div class="card-box">
+                    <h4>3. Secure Checkout</h4>
+                    <p><code>check.html</code> accepts verified delivery address, calculates taxes/shipping, and registers order in database.</p>
+                </div>
+            </div>
+
+            <div class="marathish-box">
+                <strong>🚩 Grahak Kasa Kharedi Karto?</strong> Home page varun bhaji-pala shodhto -> Add to Cart karto -> Cart page var quantity kami-jaast karto -> Checkout var delivery address takun order place karto.
+            </div>
+        </div>
+
+        <!-- SLIDE 7: Cart Logic -->
+        <div class="slide" id="slide-7">
+            <div class="slide-badge">Core Logic</div>
+            <h2 class="slide-title">Cart Calculation & Dynamic Math Logic</h2>
+            <p class="slide-subtitle">Real-time financial breakdown calculated on the client side.</p>
+
+            <div class="code-box">
+// 1. Line Total Calculation
+const lineTotal = item.price * item.quantity;
+
+// 2. Subtotal Calculation
+let subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+// 3. Delivery Fee Rule
+const deliveryFee = cart.length > 0 ? 30.00 : 0.00;
+
+// 4. Grand Total Calculation
+const grandTotal = subtotal + deliveryFee;
+            </div>
+
+            <div class="marathish-box">
+                <strong>🚩 Total Kashi Bante?</strong> Pratyek item cha (Price × Quantity) = Line Total. Sarvanchi beej = Subtotal. Tyat ₹30 Delivery Fee add houn Grand Total banto.
+            </div>
+        </div>
+
+        <!-- SLIDE 8: Farmer Module -->
+        <div class="slide" id="slide-8">
+            <div class="slide-badge">Farmer Portal</div>
+            <h2 class="slide-title">Farmer Produce Management & Listing</h2>
+            <p class="slide-subtitle">Giving farmers independent digital storefront capabilities.</p>
+
+            <div class="grid-3">
+                <div class="card-box">
+                    <h4>📸 Add Produce (<code>add12.html</code>)</h4>
+                    <p>Enter crop name, category, pricing, available weight stock, and directly upload high-res field photos.</p>
+                </div>
+                <div class="card-box">
+                    <h4>⚙️ Manage Stock (<code>manageproduct.html</code>)</h4>
+                    <p>Update live prices based on daily mandi rates or delete products safely with zero order collision.</p>
+                </div>
+                <div class="card-box">
+                    <h4>🚜 Farm Profile (<code>profile.html</code>)</h4>
+                    <p>Manage farm name, location, contact phone, and organic certification credentials.</p>
+                </div>
+            </div>
+
+            <div class="marathish-box">
+                <strong>🚩 Shetkari Kasa Product Add Karto?</strong> Shetkari login karun `add12.html` var jato. Tithe Bhaji/Falanch photo upload karto, kg chi kimmat tharvato ani stock save karto.
+            </div>
+        </div>
+
+        <!-- SLIDE 9: Farmer Orders -->
+        <div class="slide" id="slide-9">
+            <div class="slide-badge">Order Workflow</div>
+            <h2 class="slide-title">Farmer Order Management — Accept & Cancel</h2>
+            <p class="slide-subtitle">Interactive fulfillment dashboard on <code>orders.html</code>.</p>
+
+            <div class="grid-3">
+                <div class="card-box">
+                    <h4 style="color:var(--leaf-dark);"><i class="bi bi-eye-fill"></i> 1. View Details Modal</h4>
+                    <p>Clicking "View Details" reveals full customer phone, email, delivery street address, and items ordered.</p>
+                </div>
+                <div class="card-box" style="border-left:4px solid #28a745;">
+                    <h4 style="color:#28a745;"><i class="bi bi-check-circle-fill"></i> 2. 🟢 Accept Order</h4>
+                    <p>One-click button that marks the order status as <strong>Confirmed</strong> for packing & dispatch.</p>
+                </div>
+                <div class="card-box" style="border-left:4px solid var(--accent-red);">
+                    <h4 style="color:var(--accent-red);"><i class="bi bi-x-circle-fill"></i> 3. 🔴 Cancel Order</h4>
+                    <p>One-click button to reject orders with confirmation if stock is depleted (sets to <strong>Cancelled</strong>).</p>
+                </div>
+            </div>
+
+            <div class="marathish-box">
+                <strong>🚩 Farmer Order Actions:</strong> Order aalyavar shetkari <strong>View Details</strong> var click karun customer cha pata ani number baghu shakto, ani <strong>Green Accept Button</strong> dabun order confirm karu shakto kiva <strong>Red Cancel Button</strong> dabun reject karu shakto.
+            </div>
+        </div>
+
+        <!-- SLIDE 10: Admin Panel -->
+        <div class="slide" id="slide-10">
+            <div class="slide-badge">Administration</div>
+            <h2 class="slide-title">Admin Dashboard & Platform Moderation</h2>
+            <p class="slide-subtitle">Quality control, dispute resolution, and platform health.</p>
+
+            <div class="grid-2">
+                <div class="card-box">
+                    <h4>📦 Order & Finance Supervision</h4>
+                    <p>Inspect all global platform orders on <code>order.html</code> with line item breakdowns, customer details, and status overrides.</p>
+                </div>
+                <div class="card-box">
+                    <h4>👨‍🌾 Farmer & Produce Moderation</h4>
+                    <p>Verify newly registered farmers on <code>farmer.html</code> and moderate product status ('ok' vs 'blocked') on <code>product.html</code>.</p>
+                </div>
+            </div>
+
+            <div class="marathish-box">
+                <strong>🚩 Admin Cha Role Kay Ahe?</strong> Admin poorna platform var laksha thevto. Khote shetkari block karne, product chi quality check karne ani sarv orders cha hishob thevne.
+            </div>
+        </div>
+
+        <!-- SLIDE 11: Security & Auth -->
+        <div class="slide" id="slide-11">
+            <div class="slide-badge">Security Architecture</div>
+            <h2 class="slide-title">Security & Role-Based Access Control (RBAC)</h2>
+            <p class="slide-subtitle">Robust authentication with BCrypt hashing and Bearer tokens.</p>
+
+            <table class="slide-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Implementation</th>
+                        <th>Protection Provided</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Password Hashing</strong></td>
+                        <td><code>BCryptPasswordEncoder</code></td>
+                        <td>Zero plain-text passwords stored in database (Rainbow table immune).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Token Verification</strong></td>
+                        <td><code>AuthService.requireRole(token, role)</code></td>
+                        <td>Guarantees farmers cannot access admin endpoints and vice versa.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Dynamic Navbar Auth</strong></td>
+                        <td><code>api.js (ffInitNavbarAuth)</code></td>
+                        <td>Replaces "Login" with "Logout (User)" instantly on all pages.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="marathish-box">
+                <strong>🚩 Surakshitata (Security):</strong> Passwords **BCrypt algorithm** ne encrypt kele jataat. Farmer fakt tyachya portal madhe jau shakto, ani Customer fakt customer pages access karu shakto.
+            </div>
+        </div>
+
+        <!-- SLIDE 12: Challenges Solved -->
+        <div class="slide" id="slide-12">
+            <div class="slide-badge">Engineering Feats</div>
+            <h2 class="slide-title">Key Technical Challenges & Fixes Applied</h2>
+            <p class="slide-subtitle">Critical bugs identified, analyzed, and solved during development.</p>
+
+            <div class="grid-2">
+                <div class="card-box">
+                    <h4 style="color:var(--accent-red);">1. Image Truncation SQL Error</h4>
+                    <p><strong>Problem:</strong> Base64 images exceeded 255 chars in <code>VARCHAR</code>.<br>
+                    <strong>Fix:</strong> Upgraded MySQL column to <code>LONGTEXT</code> and added <code>@Lob</code> annotation in <code>Product.java</code>.</p>
+                </div>
+                <div class="card-box">
+                    <h4 style="color:var(--accent-red);">2. Foreign Key Cascade Crash</h4>
+                    <p><strong>Problem:</strong> Deleting ordered products threw FK constraint error.<br>
+                    <strong>Fix:</strong> Set <code>ON DELETE SET NULL</code> on MySQL foreign key & added JPA unlinking in <code>ProductService</code>.</p>
+                </div>
+            </div>
+
+            <div class="marathish-box">
+                <strong>🚩 Taantrik Adchani & Solution:</strong> Photo save kartana 'Data too long' error yet hota to `LONGTEXT` karun solve kela. Product delete kartana FK error yet hota to `ON DELETE SET NULL` karun solve kela.
+            </div>
+        </div>
+
+        <!-- SLIDE 13: Future Scope -->
+        <div class="slide" id="slide-13">
+            <div class="slide-badge">Future Roadmap</div>
+            <h2 class="slide-title">Future Scope & Innovations</h2>
+            <p class="slide-subtitle">Next-generation features for scaling FarmFresh nationwide.</p>
+
+            <div class="grid-3">
+                <div class="card-box">
+                    <h4>💳 Online Payments</h4>
+                    <p>Integration with Razorpay, UPI QR Codes, and Net Banking for instant farmer payouts.</p>
+                </div>
+                <div class="card-box">
+                    <h4>📲 WhatsApp / SMS Alerts</h4>
+                    <p>Automated WhatsApp notifications to farmers whenever a new order is received.</p>
+                </div>
+                <div class="card-box">
+                    <h4>🤖 AI Price Predictor</h4>
+                    <p>Machine learning models predicting optimal crop prices based on weather and mandi demand.</p>
+                </div>
+            </div>
+
+            <div class="marathish-box">
+                <strong>🚩 Pudhil Features:</strong> Online payment (UPI/GPay), WhatsApp var order alert message, ani Shetkaryanna yogya bhav milnyasathi AI Crop Price Recommendation system.
+            </div>
+        </div>
+
+        <!-- SLIDE 14: Conclusion -->
+        <div class="slide" id="slide-14">
+            <div class="slide-badge">Summary & Conclusion</div>
+            <h2 class="slide-title">Project Conclusion & Summary</h2>
+            <p class="slide-subtitle">A sustainable, production-grade technology bridge for agriculture.</p>
+
+            <div class="marathish-box" style="font-size:16px;">
+                <strong>🚩 Antim Nishkarsha (Conclusion):</strong><br>
+                FarmFresh ha project shetkaryanchya aarthik vikaasasathi ani grahakanchya aarogyasathi ek uttam madhyam ahe. Modern Java 25, Spring Boot 3.5, MySQL ani Bootstrap chya madhyamatun ha ek **100% working, secure ani production-ready project** banavla ahe.
+            </div>
+
+            <div class="grid-3" style="margin-top:20px;text-align:center;">
+                <div class="card-box" style="background:#eaf6ec;">
+                    <h3 style="color:var(--leaf-dark);font-size:28px;">0%</h3>
+                    <p style="font-weight:600;margin-top:4px;">Middlemen Brokerage</p>
+                </div>
+                <div class="card-box" style="background:#fff7e6;">
+                    <h3 style="color:#b87d00;font-size:28px;">100%</h3>
+                    <p style="font-weight:600;margin-top:4px;">Direct Farm Freshness</p>
+                </div>
+                <div class="card-box" style="background:#eef2ff;">
+                    <h3 style="color:#2f4ba6;font-size:28px;">14</h3>
+                    <p style="font-weight:600;margin-top:4px;">Comprehensive Slides</p>
+                </div>
+            </div>
+
+            <div style="text-align:center;margin-top:30px;">
+                <h3 style="color:var(--leaf-deep);font-family:'Bitter',serif;">🌾 Thank You! / धन्यवाद! 🌾</h3>
+                <p style="color:#666;font-size:14px;margin-top:4px;">Questions & Answers Session Open</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Floating Navigation Controls -->
+    <div class="bottom-nav">
+        <button class="nav-btn-round" id="prevBtn" onclick="prevSlide()" title="Previous Slide (Arrow Left)"><i class="bi bi-chevron-left"></i></button>
+        <button class="nav-btn-round" id="nextBtn" onclick="nextSlide()" title="Next Slide (Arrow Right)"><i class="bi bi-chevron-right"></i></button>
+    </div>
+
+    <!-- Interactive Slideshow JavaScript -->
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 14;
+
+        function showSlide(n) {
+            if (n < 1) n = 1;
+            if (n > totalSlides) n = totalSlides;
+
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            const activeSlide = document.getElementById('slide-' + n);
+            if (activeSlide) {
+                activeSlide.classList.add('active');
+            }
+
+            currentSlide = n;
+            document.getElementById('slideIndicator').textContent = `Slide ${currentSlide} / ${totalSlides}`;
+            document.getElementById('progressBar').style.width = `${(currentSlide / totalSlides) * 100}%`;
+
+            // Scroll to top of slide
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                showSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                showSlide(currentSlide - 1);
+            }
+        }
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowRight' || e.key === 'Space') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            } else if (e.key === 'f' || e.key === 'F') {
+                toggleFullScreen();
+            }
+        });
+
+        // Fullscreen Mode
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    alert(`Error attempting to enable full-screen mode: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

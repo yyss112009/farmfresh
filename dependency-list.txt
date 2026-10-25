@@ -1,0 +1,25 @@
+[INFO] Scanning for projects...
+[INFO] Loaded 23533 auto-discovered prefixes for remote repository central (prefixes-central.txt)
+[INFO] Loaded 74 auto-discovered prefixes for remote repository apache.snapshots (prefixes-apache.snapshots.txt)
+[INFO] 
+[INFO] -----------------------< com.backend:farm-fresh >-----------------------
+[INFO] Building farm-fresh 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- dependency:3.8.1:list (default-cli) @ farm-fresh ---
+[INFO] 
+[INFO] The following files have been resolved:
+[INFO]    org.springframework.boot:spring-boot-starter-web:jar:3.5.5:compile -- module spring.boot.starter.web [auto]
+[INFO]    org.springframework.boot:spring-boot-starter-security:jar:3.5.5:compile -- module spring.boot.starter.security [auto]
+[INFO]    org.springframework.boot:spring-boot-starter-validation:jar:3.5.5:compile -- module spring.boot.starter.validation [auto]
+[INFO]    org.springframework.boot:spring-boot-starter-data-jpa:jar:3.5.5:compile -- module spring.boot.starter.data.jpa [auto]
+[INFO]    com.mysql:mysql-connector-j:jar:9.4.0:runtime -- module mysql.connector.j (auto)
+[INFO]    org.springframework.boot:spring-boot-starter-test:jar:3.5.5:test -- module spring.boot.starter.test [auto]
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  5.320 s
+[INFO] Finished at: 2026-08-15T17:14:30+05:30
+[INFO] ------------------------------------------------------------------------
