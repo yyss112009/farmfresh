@@ -2,7 +2,7 @@
 ## Technical Documentation & Developer Guide
 
 ---
-
+.
 ## Table of Contents
 1. [Project Overview & Architecture](#1-project-overview--architecture)
 2. [Technology Stack & File Directory](#2-technology-stack--file-directory)
